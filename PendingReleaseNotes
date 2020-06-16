@@ -81,3 +81,7 @@
 * Monitors now have a config option ``mon_osd_warn_num_repaired``, 10 by default.
   If any OSD has repaired more than this many I/O errors in stored data a
  ``OSD_TOO_MANY_REPAIRS`` health warning is generated.
+
+* OSD: A new configuration option ``osd_compact_on_start`` has been added which triggers
+  an OSD compaction on start. Setting this option to ``true`` and restarting an OSD
+  will result in a offline compaction of the OSD.
