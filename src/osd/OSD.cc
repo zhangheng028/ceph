@@ -5883,6 +5883,7 @@ void OSD::dispatch_session_waiting(Session *session, OSDMapRef osdmap)
 {
   assert(session->session_dispatch_lock.is_locked());
   assert(session->osdmap == osdmap);
+  // zhangheng028 循环调用dispatch_op_fast处理请求
   for (list<OpRequestRef>::iterator i = session->waiting_on_map.begin();
        i != session->waiting_on_map.end() && dispatch_op_fast(*i, osdmap);
        session->waiting_on_map.erase(i++));
@@ -5975,6 +5976,7 @@ void OSD::session_notify_pg_cleared(
   clear_session_waiting_on_pg(session, pgid);
 }
 
+// zhangheng028 osd接收消息入口
 void OSD::ms_fast_dispatch(Message *m)
 {
   if (service.is_stopping()) {
@@ -5989,13 +5991,17 @@ void OSD::ms_fast_dispatch(Message *m)
     tracepoint(osd, ms_fast_dispatch, reqid.name._type,
         reqid.name._num, reqid.tid, reqid.inc);
   }
+  // zhangheng028 
   OSDMapRef nextmap = service.get_nextmap_reserved();
+  // zhangheng028 获取 session 其中包含了一个Connection的相关信息
   Session *session = static_cast<Session*>(m->get_connection()->get_priv());
   if (session) {
     {
       Mutex::Locker l(session->session_dispatch_lock);
       update_waiting_for_pg(session, nextmap);
+      // zhangheng028 将请求加如waiting_on_map的列表里
       session->waiting_on_map.push_back(op);
+      // zhangheng028 处理请求
       dispatch_session_waiting(session, nextmap);
     }
     session->put();
