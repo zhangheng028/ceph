@@ -90,3 +90,9 @@ GTAGS
 
 # editor backup files etc.
 \#*\#
+
+# vscode
+/.vscode/
+
+# qa
+/qa/

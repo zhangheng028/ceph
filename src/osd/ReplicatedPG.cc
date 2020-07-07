@@ -1642,7 +1642,7 @@ void ReplicatedPG::do_op(OpRequestRef& op)
     }
     return do_pg_op(op);
   }
-
+  // zhangheng028 构造hash对象信息结构体，指定为对象head对象，故snap设置为CEPH_NOSNAP
   hobject_t head(m->get_oid(), m->get_object_locator().key,
 		 CEPH_NOSNAP, m->get_pg().ps(),
 		 info.pgid.pool(), m->get_object_locator().nspace);
