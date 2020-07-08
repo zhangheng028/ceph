@@ -3735,7 +3735,7 @@ public:
       lock("ReplicatedPG::ObjectContext::lock"),
       unstable_writes(0), readers(0), writers_waiting(0), readers_waiting(0),
       blocked(false), requeue_scrub_on_unblock(false) {}
-
+// ObjectContext析构函数，调用注册的destructor_callback方法
   ~ObjectContext() {
     assert(rwstate.empty());
     if (destructor_callback)
