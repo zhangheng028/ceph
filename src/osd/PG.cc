@@ -1908,7 +1908,8 @@ bool PG::op_has_sufficient_caps(OpRequestRef& op)
 			     op->need_write_cap(),
 			     op->need_class_read_cap(),
 			     op->need_class_write_cap());
-
+  // zhangheng028 2020-07-08 14:20:44.372638 7f5c4f35a700 20 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] op_has_sufficient_caps pool=41 (rbd ) owner=0 need_read_cap=1 need_write_cap=0 need_class_read_cap=0 need_class_write_cap=0 -> yes
+  // zhangheng028 2020-07-08 15:25:04.659966 7f5c4d356700 20 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] op_has_sufficient_caps pool=41 (rbd ) owner=0 need_read_cap=0 need_write_cap=1 need_class_read_cap=0 need_class_write_cap=0 -> yes
   dout(20) << "op_has_sufficient_caps pool=" << pool.id << " (" << pool.name
 		   << " " << req->get_object_locator().nspace
 	   << ") owner=" << pool.auid
@@ -3122,6 +3123,7 @@ void PG::add_log_entry(const pg_log_entry_t& e)
 
   // log mutation
   pg_log.add(e);
+  // zhangheng028 2020-07-08 15:25:04.660711 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445374 (37170'2442308,37170'2445374] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] add_log_entry 37170'2445374 (37170'2445307) modify   41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head by client.26570172.0:3510950 2020-07-08 15:25:04.495800
   dout(10) << "add_log_entry " << e << dendl;
 }
 
@@ -3144,6 +3146,7 @@ void PG::append_log(
   if (info.last_epoch_started != info.history.last_epoch_started) {
     info.history.last_epoch_started = info.last_epoch_started;
   }
+  // zhangheng028 2020-07-08 15:25:04.660692 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] append_log log((37170'2442308,37170'2445373], crt=37170'2445369) [37170'2445374 (37170'2445307) modify   41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head by client.26570172.0:3510950 2020-07-08 15:25:04.495800]
   dout(10) << "append_log " << pg_log.get_log() << " " << logv << dendl;
 
   for (vector<pg_log_entry_t>::const_iterator p = logv.begin();
@@ -3173,6 +3176,7 @@ void PG::append_log(
 
   pg_log.trim(&handler, trim_to, info);
 
+  // zhangheng028 2020-07-08 15:25:04.660733 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445374 (37170'2442308,37170'2445374] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] append_log: trimming to 37170'2445369 entries 2020-07-08 15:25:04.660967 7f5c4d356700  5 write_log with: dirty_to: 0'0, dirty_from: 4294967295'18446744073709551615, dirty_divergent_priors: false, divergent_priors: 0, writeout_from: 37170'2445374, trimmed:
   dout(10) << __func__ << ": trimming to " << trim_rollback_to
 	   << " entries " << handler.to_trim << dendl;
   handler.apply(this, &t);

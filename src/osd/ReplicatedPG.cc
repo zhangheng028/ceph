@@ -1737,7 +1737,8 @@ void ReplicatedPG::do_op(OpRequestRef& op)
       return;
     }
   }
-
+  // zhangheng028 2020-07-08 14:20:44.372651 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] do_op osd_op(client.26570172.0:1064158 41.db9a8998 rbd_data.95dc046b8b4567.00000000000008cf [read 2256896~4096] snapc 0=[] ack+read+known_if_redirected e37170) v7 may_read -> read-ordered flags ack+read+known_if_redirected
+  // zhangheng028 2020-07-08 15:25:04.659985 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] do_op osd_op(client.26570172.0:3510950 41.2683c792 rbd_data.95dc046b8b4567.0000000000000404 [write 16384~4096] snapc 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28] ack+ondisk+write+known_if_redirected e37170) v7 may_write -> write-ordered flags ack+ondisk+write+known_if_redirected
   dout(10) << "do_op " << *m
 	   << (op->may_write() ? " may_write" : "")
 	   << (op->may_read() ? " may_read" : "")
@@ -2895,6 +2896,8 @@ void ReplicatedPG::promote_object(ObjectContextRef obc,
 
 void ReplicatedPG::execute_ctx(OpContext *ctx)
 {
+  // zhangheng028 2020-07-08 14:20:44.373040 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] execute_ctx 0x55a929b73800
+  // zhangheng028 2020-07-08 15:25:04.660231 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] execute_ctx 0x55a924071800
   dout(10) << __func__ << " " << ctx << dendl;
   ctx->reset_obs(ctx->obc);
   OpRequestRef op = ctx->op;
@@ -2930,13 +2933,14 @@ void ReplicatedPG::execute_ctx(OpContext *ctx)
     // version
     ctx->at_version = get_next_version();
     ctx->mtime = m->get_mtime();
-
+    // zhangheng028 2020-07-08 15:25:04.660277 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] do_op 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head [write 16384~4096] ov 37170'2445307 av 37170'2445374 snapc 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28] snapset 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]:[2a29,2a2b,2a2d,2a2f,2a31]+head
     dout(10) << "do_op " << soid << " " << ctx->ops
 	     << " ov " << obc->obs.oi.version << " av " << ctx->at_version 
 	     << " snapc " << ctx->snapc
 	     << " snapset " << obc->ssc->snapset
 	     << dendl;  
   } else {
+    // zhangheng028 2020-07-08 14:20:44.373082 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] do_op 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head [read 2256896~4096] ov 37170'2402029
     dout(10) << "do_op " << soid << " " << ctx->ops
 	     << " ov " << obc->obs.oi.version
 	     << dendl;  
@@ -3007,6 +3011,7 @@ void ReplicatedPG::execute_ctx(OpContext *ctx)
   // with the write, or return a CMPXATTR and the read value.
   if (successful_write) {
     // write.  normalize the result code.
+    // zhangheng028 2020-07-08 15:25:04.660637 7f5c4d356700 20 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean]  zeroing write result code 0
     dout(20) << " zeroing write result code " << result << dendl;
     result = 0;
   }
@@ -4121,7 +4126,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
   bool first_read = true;
 
   PGBackend::PGTransaction* t = ctx->op_t.get();
-
+  // zhangheng028 2020-07-08 15:25:04.660297 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] do_osd_op 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head [write 16384~4096]
   dout(10) << "do_osd_op " << soid << " " << ops << dendl;
 
   for (vector<OSDOp>::iterator p = ops.begin(); p != ops.end(); ++p, ctx->current_osd_subop_num++) {
@@ -4133,7 +4138,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
     // but the code in this function seems to treat them as native-endian.  What should the
     // tracepoints do?
     tracepoint(osd, do_osd_op_pre, soid.oid.name.c_str(), soid.snap.val, op.op, ceph_osd_op_name(op.op), op.flags);
-
+    // zhangheng028 2020-07-08 15:25:04.660306 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] do_osd_op  write 16384~4096
     dout(10) << "do_osd_op  " << osd_op << dendl;
 
     bufferlist::iterator bp = osd_op.indata.begin();
@@ -6282,6 +6287,7 @@ void ReplicatedPG::make_writeable(OpContext *ctx)
 
   // clone?
   assert(soid.snap == CEPH_NOSNAP);
+  // zhangheng028 2020-07-08 15:25:04.660321 7f5c4d356700 20 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] make_writeable 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head snapset=0x55a92285c300  snapc=2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]
   dout(20) << "make_writeable " << soid << " snapset=" << ctx->snapset
 	   << "  snapc=" << snapc << dendl;
   
@@ -6431,6 +6437,7 @@ void ReplicatedPG::make_writeable(OpContext *ctx)
   ctx->new_snapset.seq = snapc.seq;
   ctx->new_snapset.snaps = snapc.snaps;
   ctx->new_snapset.head_exists = ctx->new_obs.exists;
+  // zhangheng028 2020-07-08 15:25:04.660333 7f5c4d356700 20 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] make_writeable 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head done, snapset=2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]:[2a29,2a2b,2a2d,2a2f,2a31]+head
   dout(20) << "make_writeable " << soid << " done, snapset=" << ctx->new_snapset << dendl;
 }
 
@@ -6648,6 +6655,7 @@ void ReplicatedPG::finish_ctx(OpContext *ctx, int log_op_type, bool maintain_ssc
 			      bool scrub_ok)
 {
   const hobject_t& soid = ctx->obs->oi.soid;
+  // zhangheng028 2020-07-08 15:25:04.660344 7f5c4d356700 20 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] finish_ctx 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head 0x55a924071800 op modify
   dout(20) << __func__ << " " << soid << " " << ctx
 	   << " op " << pg_log_entry_t::get_op_name(log_op_type)
 	   << dendl;
@@ -6767,6 +6775,7 @@ void ReplicatedPG::finish_ctx(OpContext *ctx, int log_op_type, bool maintain_ssc
     ctx->new_obs.oi.last_reqid = ctx->reqid;
     if (ctx->mtime != utime_t()) {
       ctx->new_obs.oi.mtime = ctx->mtime;
+      // zhangheng028 2020-07-08 15:25:04.660394 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean]  set mtime to 2020-07-08 15:25:04.495800
       dout(10) << " set mtime to " << ctx->new_obs.oi.mtime << dendl;
       ctx->new_obs.oi.local_mtime = now;
     } else {
@@ -6779,6 +6788,7 @@ void ReplicatedPG::finish_ctx(OpContext *ctx, int log_op_type, bool maintain_ssc
     attrs[OI_ATTR].claim(bv);
 
     if (soid.snap == CEPH_NOSNAP) {
+      // zhangheng028 2020-07-08 15:25:04.660425 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean]  final snapset 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]:[2a29,2a2b,2a2d,2a2f,2a31]+head in 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head
       dout(10) << " final snapset " << ctx->new_snapset
 	       << " in " << soid << dendl;
       attrs[SS_ATTR].claim(bss);
@@ -8380,6 +8390,7 @@ void ReplicatedPG::eval_repop(RepGather *repop)
     m = static_cast<MOSDOp *>(repop->op->get_req());
 
   if (m)
+    // zhangheng028 2020-07-08 15:25:04.663108 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445374 (37170'2442308,37170'2445374] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] eval_repop repgather(0x55a920fdf900 37170'2445374 rep_tid=16510792 committed?=0 applied?=0) wants=ad
     dout(10) << "eval_repop " << *repop
 	     << " wants=" << (m->wants_ack() ? "a":"") << (m->wants_ondisk() ? "d":"")
 	     << (repop->rep_done ? " DONE" : "")
@@ -8477,6 +8488,7 @@ void ReplicatedPG::eval_repop(RepGather *repop)
 void ReplicatedPG::issue_repop(RepGather *repop, OpContext *ctx)
 {
   const hobject_t& soid = ctx->obs->oi.soid;
+  // zhangheng028 2020-07-08 15:25:04.660675 7f5c4d356700  7 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] issue_repop rep_tid 16510792 o 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head
   dout(7) << "issue_repop rep_tid " << repop->rep_tid
           << " o " << soid
           << dendl;
@@ -8544,6 +8556,7 @@ ReplicatedPG::RepGather *ReplicatedPG::new_repop(
   ceph_tid_t rep_tid)
 {
   if (ctx->op)
+    // zhangheng028 2020-07-08 15:25:04.660649 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] new_repop rep_tid 16510792 on osd_op(client.26570172.0:3510950 41.2683c792 rbd_data.95dc046b8b4567.0000000000000404 [write 16384~4096] snapc 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28] ack+ondisk+write+known_if_redirected e37170) v7
     dout(10) << "new_repop rep_tid " << rep_tid << " on " << *ctx->op->get_req() << dendl;
   else
     dout(10) << "new_repop rep_tid " << rep_tid << " (no op)" << dendl;
@@ -8939,9 +8952,11 @@ ObjectContextRef ReplicatedPG::get_object_context(const hobject_t& soid,
   osd->logger->inc(l_osd_object_ctx_cache_total);
   if (obc) {
     osd->logger->inc(l_osd_object_ctx_cache_hit);
+    // zhangheng028 2020-07-08 15:25:04.660008 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] get_object_context: found obc in cache: 0x55a9211e8c00
     dout(10) << __func__ << ": found obc in cache: " << obc
 	     << dendl;
   } else {
+    // zhangheng028 2020-07-08 14:20:44.372666 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] get_object_context: obc NOT found in cache: 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head
     dout(10) << __func__ << ": obc NOT found in cache: " << soid << dendl;
     // check disk
     bufferlist bv;
@@ -9008,11 +9023,16 @@ ObjectContextRef ReplicatedPG::get_object_context(const hobject_t& soid,
 	assert(r == 0);
       }
     }
+    // not fount ? 2020-07-08 14:20:44.372891 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] populate_obc_watchers 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head
+    // not fount ? 2020-07-08 14:20:44.372908 7f5c4f35a700 20 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] ReplicatedPG::check_blacklisted_obc_watchers for obc 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head
 
+    // zhangheng028 2020-07-08 14:20:44.372919 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] get_object_context: creating obc from disk: 0x55a9283c2c00
     dout(10) << __func__ << ": creating obc from disk: " << obc
 	     << dendl;
   }
   assert(obc->ssc);
+  // zhangheng028 2020-07-08 14:20:44.372932 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] get_object_context: 0x55a9283c2c00 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head rwstate(none n=0 w=0) oi: 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head(37170'2402029 client.26570172.0:47477 dirty|omap_digest s 4177920 uv 2402029 od ffffffff alloc_hint [4194304 4194304]) ssc: 0x55a92195be00 snapset: 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]:[2a29,2a2b,2a2d,2a2f,2a31]+head
+  // zhangheng028 2020-07-08 15:25:04.660026 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] get_object_context: 0x55a9211e8c00 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head rwstate(none n=0 w=0) oi: 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head(37170'2445307 client.26570172.0:3509917 dirty|omap_digest s 4194304 uv 2445307 od ffffffff alloc_hint [4194304 4194304]) ssc: 0x55a92285c280 snapset: 2a31=[2a31,2a30,2a2f,2a2e,2a2d,2a2c,2a2b,2a2a,2a29,2a28]:[2a29,2a2b,2a2d,2a2f,2a31]+head
   dout(10) << __func__ << ": " << obc << " " << soid
 	   << " " << obc->rwstate
 	   << " oi: " << obc->obs.oi
@@ -9063,6 +9083,8 @@ int ReplicatedPG::find_object_context(const hobject_t& oid,
         *pmissing = oid;
       return -ENOENT;
     }
+    // zhangheng028 2020-07-08 14:20:44.372952 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] find_object_context 41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head @head oi=41:199159db:::rbd_data.95dc046b8b4567.00000000000008cf:head(37170'2402029 client.26570172.0:47477 dirty|omap_digest s 4177920 uv 2402029 od ffffffff alloc_hint [4194304 4194304])
+    // zhangheng028 2020-07-08 15:25:04.660044 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.2( v 37170'2445373 (37170'2442308,37170'2445373] local-les=26292 n=2194 ec=9394 les/c/f 26292/26292/24727 26056/26291/25694) [9] r=0 lpr=26291 luod=37170'2445370 lua=37170'2445350 crt=37170'2445369 lcod 37170'2445369 mlcod 37170'2445369 active+clean] find_object_context 41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head @head oi=41:49e3c164:::rbd_data.95dc046b8b4567.0000000000000404:head(37170'2445307 client.26570172.0:3509917 dirty|omap_digest s 4194304 uv 2445307 od ffffffff alloc_hint [4194304 4194304])
     dout(10) << "find_object_context " << oid
        << " @" << oid.snap
        << " oi=" << obc->obs.oi

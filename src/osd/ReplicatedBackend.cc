@@ -158,6 +158,8 @@ bool ReplicatedBackend::handle_message(
   OpRequestRef op
   )
 {
+  // zhangheng028 2020-07-08 14:20:44.372627 7f5c4f35a700 10 osd.9 pg_epoch: 37170 pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean] handle_message: 0x55a9227c9a40
+  // zhangheng028 2020-07-08 15:25:04.684968 7f5c4d356700 10 osd.9 pg_epoch: 37170 pg[41.c( v 37170'2113904 (37170'2110899,37170'2113904] local-les=26292 n=2207 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 luod=37170'2113903 lua=37170'2113894 crt=37170'2113898 lcod 37170'2113902 mlcod 37170'2113901 active+clean] handle_message: 0x55a923c6a280
   dout(10) << __func__ << ": " << op << dendl;
   switch (op->get_req()->get_type()) {
   case MSG_OSD_PG_PUSH:

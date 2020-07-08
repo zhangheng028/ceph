@@ -8927,6 +8927,8 @@ void OSD::dequeue_op(
   utime_t now = ceph_clock_now(cct);
   op->set_dequeued_time(now);
   utime_t latency = now - op->get_req()->get_recv_stamp();
+  // zhangheng028 2020-07-08 14:20:44.372581 7f5c4f35a700 10 osd.9 37170 dequeue_op 0x55a9227c9a40 prio 63 cost 0 latency 0.051721 osd_op(client.26570172.0:1064158 41.db9a8998 (undecoded) ack+read+known_if_redirected e37170) v7 pg pg[41.8( v 37170'2402062 (37137'2399012,37170'2402062] local-les=26292 n=2063 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 crt=37170'2402060 lcod 37170'2402061 mlcod 37170'2402061 active+clean]
+  // zhangheng028 2020-07-08 15:25:04.684909 7f5c4d356700 10 osd.9 37170 dequeue_op 0x55a923c6a280 prio 63 cost 4096 latency 0.000768 osd_op(client.26570172.0:3510978 41.943f224c (undecoded) ack+ondisk+write+known_if_redirected e37170) v7 pg pg[41.c( v 37170'2113904 (37170'2110899,37170'2113904] local-les=26292 n=2207 ec=12160 les/c/f 26292/26292/24727 26056/26291/26057) [9] r=0 lpr=26291 luod=37170'2113903 lua=37170'2113894 crt=37170'2113898 lcod 37170'2113902 mlcod 37170'2113901 active+clean]
   dout(10) << "dequeue_op " << op << " prio " << op->get_req()->get_priority()
 	   << " cost " << op->get_req()->get_cost()
 	   << " latency " << latency
@@ -8967,6 +8969,7 @@ void OSD::dequeue_op(
   pg->do_request(op, handle);
 
   // finish
+  // zhagheng028 2020-07-08 15:25:04.663216 7f5c4d356700 10 osd.9 37170 dequeue_op 0x55a91ed5ec80 finish
   dout(10) << "dequeue_op " << op << " finish" << dendl;
 }
 
