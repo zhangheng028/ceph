@@ -96,3 +96,7 @@ GTAGS
 
 # qa
 /qa/
+
+/.classpath
+/.idea/
+/cmake-build-debug/
