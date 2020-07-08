@@ -1005,6 +1005,8 @@ protected:
   }
 
   // projected object info
+  // zhangh012 LRU缓存object_context,ReplicatedPG构造方法中，初始化缓存大小
+  // zhangh012 具体初识化大小：object_contexts(o->cct, g_conf->osd_pg_object_context_cache_count)
   SharedLRU<hobject_t, ObjectContext, hobject_t::ComparatorWithDefault> object_contexts;
   // map from oid.snapdir() to SnapSetContext *
   map<hobject_t, SnapSetContext*, hobject_t::BitwiseComparator> snapset_contexts;
@@ -1036,6 +1038,7 @@ protected:
     ObjectContext *obc;
     C_PG_ObjectContext(ReplicatedPG *p, ObjectContext *o) :
       pg(p), obc(o) {}
+    // Context中注册了complete方法，调用finish完成回收
     void finish(int r) {
       pg->object_context_destructor_callback(obc);
     }
