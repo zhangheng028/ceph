@@ -8656,11 +8656,12 @@ void OSD::handle_op(OpRequestRef& op, OSDMapRef& osdmap)
     // missing pool or acting set empty -- drop
     return;
   }
-
+  // zhangheng028 获取pg
   PG *pg = get_pg_or_queue_for_pg(pgid, op);
   if (pg) {
     op->send_map_update = share_map.should_send;
     op->sent_epoch = m->get_map_epoch();
+    // zhangheng028 将op和pg包装，加入osd的op_wq队列，OSD::dequeue_op异步处理
     enqueue_op(pg, op);
     share_map.should_send = false;
     return;
@@ -8779,6 +8780,7 @@ void OSD::enqueue_op(PG *pg, OpRequestRef& op)
 	   << " cost " << op->get_req()->get_cost()
 	   << " latency " << latency
 	   << " " << *(op->get_req()) << dendl;
+  // zhangheng028 将op将入队列  OSD::dequeue_op异步处理
   pg->queue_op(op);
 }
 
