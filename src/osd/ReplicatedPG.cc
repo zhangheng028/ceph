@@ -1849,6 +1849,7 @@ void ReplicatedPG::do_op(OpRequestRef& op)
   ObjectContextRef obc;
   bool can_create = op->may_write() || op->may_cache();
   hobject_t missing_oid;
+  // zhangh012 根据请求生成 hobject_t oid
   hobject_t oid(m->get_oid(),
 		m->get_object_locator().key,
 		m->get_snapid(),
@@ -1861,7 +1862,7 @@ void ReplicatedPG::do_op(OpRequestRef& op)
       maybe_await_blocked_snapset(oid, op)) {
     return;
   }
-
+  // zhangh012 获取object_context，LRU的缓存保存，默认最大缓存个数64(osd_pg_object_context_cache_count)
   int r = find_object_context(
     oid, &obc, can_create,
     m->has_flag(CEPH_OSD_FLAG_MAP_SNAP_CLONE),
@@ -8911,6 +8912,7 @@ ObjectContextRef ReplicatedPG::create_object_context(const object_info_t& oi,
 {
   ObjectContextRef obc(object_contexts.lookup_or_create(oi.soid));
   assert(obc->destructor_callback == NULL);
+  // zhangh012 object_context注册析构回调方法，调用put_snapset_context清理snapset_context
   obc->destructor_callback = new C_PG_ObjectContext(this, obc.get());  
   obc->obs.oi = oi;
   obc->obs.exists = false;
