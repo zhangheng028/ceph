@@ -621,7 +621,7 @@ void ReplicatedBackend::submit_transaction(
 
   vector<ObjectStore::Transaction> tls;
   tls.push_back(std::move(op_t));
-
+  // zhangheng028 提交io事务
   parent->queue_transactions(tls, op.op);
 }
 

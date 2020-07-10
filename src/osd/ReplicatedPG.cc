@@ -8535,6 +8535,7 @@ void ReplicatedPG::issue_repop(RepGather *repop, OpContext *ctx)
     ctx->obc,
     ctx->clone_obc,
     unlock_snapset_obc ? ctx->snapset_obc : ObjectContextRef());
+    // zhangheng028 提交事物
   pgbackend->submit_transaction(
     soid,
     ctx->at_version,

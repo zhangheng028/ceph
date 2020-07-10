@@ -333,6 +333,7 @@ public:
     osd->store->queue_transaction(osr.get(), std::move(t), 0, 0, 0, op);
   }
   void queue_transactions(vector<ObjectStore::Transaction>& tls, OpRequestRef op) {
+    // zhangheng028 调用后端存储引擎 提交io事务
     osd->store->queue_transactions(osr.get(), tls, 0, 0, 0, op, NULL);
   }
   epoch_t get_epoch() const {
